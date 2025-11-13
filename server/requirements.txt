@@ -1,0 +1,9 @@
+fastapi
+uvicorn[standard]
+opencv-python
+numpy
+jinja2
+python-multipart
+pyuvc @ git+https://github.com/pupil-labs/pyuvc.git
+pytest
+

@@ -1,0 +1,46 @@
+# General
+.DS_Store
+Thumbs.db
+*.log
+*.tmp
+*.swp
+*.bak
+
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.venv/
+env/
+venv/
+
+# Build & Packaging
+build/
+dist/
+*.egg-info/
+.eggs/
+
+# Virtual environments (common paths)
+.env/
+.envrc
+.idea/
+.vscode/
+
+# Notebooks
+.ipynb_checkpoints/
+
+# OS/Editor
+.svn/
+.hg/
+.vs/
+
+# Project specific
+server/backend/.venv/
+server/record/
+record/
+server/backend/app/static/dist/
+

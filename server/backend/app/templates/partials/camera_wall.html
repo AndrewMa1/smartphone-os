@@ -1,0 +1,36 @@
+<section class="camera-wall">
+  {% for camera in cameras %}
+  <div class="camera-wall__item">
+    <header class="camera-wall__header">
+      <h3>{{ camera.display_name }}</h3>
+      <p class="meta">
+        ID: {{ camera.camera_id }} · 分辨率: {{ camera.resolution }} · FPS: {{ camera.fps }}
+      </p>
+      <form method="post" action="/cameras/{{ camera.camera_id }}/start">
+        <button type="submit" class="btn btn-primary btn-small" {% if camera.running %}disabled{% endif %}>
+          开启
+        </button>
+      </form>
+      <form method="post" action="/cameras/{{ camera.camera_id }}/stop">
+        <button type="submit" class="btn btn-secondary btn-small" {% if not camera.running %}disabled{% endif %}>
+          关闭
+        </button>
+      </form>
+    </header>
+    <div class="camera-wall__stream">
+      {% if camera.running %}
+      <img
+        src="/api/cameras/{{ camera.camera_id }}/stream"
+        alt="{{ camera.display_name }} 预览"
+        class="camera-wall__image"
+      />
+      {% else %}
+      <div class="camera-wall__placeholder">
+        <p>摄像头待机中，点击上方按钮立即启动。</p>
+      </div>
+      {% endif %}
+    </div>
+  </div>
+  {% endfor %}
+</section>
+

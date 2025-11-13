@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>{{ page_title }}</title>
+    <link rel="stylesheet" href="/static/css/base.css" />
+  </head>
+  <body>
+    <header class="header">
+      <h1>智能眼镜控制中台</h1>
+      <p class="subtitle">实时监控三路摄像头与录制状态</p>
+    </header>
+    <main class="content">
+      <section class="dashboard">
+        <div class="status-card device-card">
+          <h2>设备信息</h2>
+          <ul class="device-info">
+            <li>
+              <span>主机名</span>
+              <span>{{ device_status.hostname }}</span>
+            </li>
+            <li>
+              <span>IP 地址</span>
+              <span>{{ device_status.ip_address }}</span>
+            </li>
+            <li>
+              <span>系统版本</span>
+              <span>{{ device_status.os_release }}</span>
+            </li>
+            <li>
+              <span>电量</span>
+              <span>{{ device_status.battery_percentage }}</span>
+            </li>
+          </ul>
+        </div>
+        <div class="status-card recording-card">
+          <h2>录制控制</h2>
+          <p>
+            当前状态：
+            {% if recording.active %}
+              <span class="status status-recording">录制中</span>
+            {% else %}
+              <span class="status status-idle">未录制</span>
+            {% endif %}
+          </p>
+          {% if recording.record_dir %}
+          <p class="record-path">
+            输出目录：<code>{{ recording.record_dir }}</code>
+          </p>
+          {% endif %}
+          <div class="actions">
+            <form method="post" action="/recording/start">
+              <button type="submit" class="btn btn-primary" {% if recording.active %}disabled{% endif %}>
+                开始录制全部摄像头
+              </button>
+            </form>
+            <form method="post" action="/recording/stop">
+              <button type="submit" class="btn btn-danger" {% if not recording.active %}disabled{% endif %}>
+                停止录制
+              </button>
+            </form>
+          </div>
+        </div>
+        <div class="status-card">
+          <h2>摄像头摘要</h2>
+          <ul>
+            {% for camera in cameras %}
+            <li>
+              <span>{{ camera.display_name }} ({{ camera.camera_id }})</span>
+              <span class="status {{ 'status-ok' if camera.running else 'status-idle' }}">
+                {{ '在线' if camera.running else '离线' }}
+              </span>
+            </li>
+            {% endfor %}
+          </ul>
+        </div>
+        <div class="status-card algorithms-card">
+          <h2>视觉算法</h2>
+          <ul class="algorithms-list">
+            {% for algorithm in algorithms %}
+            <li>
+              <div class="algorithm-info">
+                <h3>{{ algorithm.display_name }}</h3>
+                <p class="meta">{{ algorithm.description }}</p>
+                {% if algorithm.last_frame_shapes %}
+                <p class="meta">
+                  最近采样：
+                  {% for cam_id, shape in algorithm.last_frame_shapes.items() %}
+                    <span class="sample-shape">{{ cam_id }}: {{ shape if shape else '无数据' }}</span>
+                  {% endfor %}
+                </p>
+                {% endif %}
+              </div>
+              <div class="algorithm-actions actions">
+                <form method="post" action="/algorithms/{{ algorithm.algorithm_id }}/start">
+                  <button type="submit" class="btn btn-primary" {% if algorithm.running %}disabled{% endif %}>
+                    启动
+                  </button>
+                </form>
+                <form method="post" action="/algorithms/{{ algorithm.algorithm_id }}/stop">
+                  <button type="submit" class="btn btn-secondary" {% if not algorithm.running %}disabled{% endif %}>
+                    停止
+                  </button>
+                </form>
+                <span class="status {{ 'status-ok' if algorithm.running else 'status-idle' }}">
+                  {{ '运行中' if algorithm.running else '已停止' }}
+                </span>
+              </div>
+            </li>
+            {% endfor %}
+          </ul>
+        </div>
+      </section>
+    </main>
+    {% include "partials/camera_wall.html" %}
+  </body>
+</html>
+
