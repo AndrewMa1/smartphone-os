@@ -4,6 +4,5 @@ opencv-python
 numpy
 jinja2
 python-multipart
-pupil-labs-uvc
 pytest
 
