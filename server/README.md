@@ -82,6 +82,34 @@ cd /Users/andrew/mty/开发/smartphone-os/server
 4. **网络访问**：确认开发板处于目标局域网，可先通过 `ifconfig` 或 `ip addr` 获取 IP，外部浏览器访问 `http://IP:8000/`。
 5. **日志查看**：FastAPI/Uvicorn 默认输出至 stdout，可配合 `journalctl -u smartglasses.service -f` 查看。
 
+## 硬件信息 & GPS 展示
+
+Web 控制台会自动调用 `hardinfo` 与 `microcom` 获取硬件摘要和 GPS 状态（显示经纬度、海拔、速度、卫星数等）。如需启用该功能：
+
+- 安装依赖：
+  ```bash
+  sudo apt-get install hardinfo microcom
+  ```
+- 若 GPS 模块通过串口连接，可配置以下环境变量（可在 systemd 或 shell 中设置）：
+
+  | 变量 | 说明 | 默认值 |
+  | ---- | ---- | ---- |
+  | `GPS_SERIAL_DEVICE` | GPS 所在串口路径 | `/dev/ttyUSB0` |
+  | `GPS_SERIAL_BAUD` | 串口波特率 | `9600` |
+  | `GPS_READ_TIMEOUT` | 采集超时时间（秒） | `3.0` |
+  | `GPS_SKIP_DEVICE_CHECK` | 设为 `1` 可跳过串口存在性检查 | `0` |
+  | `GPS_SAMPLE_FILE` | 指向包含 NMEA 语句的文本文件，用于本地调试 | 空 |
+
+- 可通过环境变量定制 `hardinfo` 行为：
+
+  | 变量 | 说明 | 默认值 |
+  | ---- | ---- | ---- |
+  | `HARDINFO_SECTIONS` | 读取的模块，逗号分隔 | `devices.cpu,devices.memory,devices.storage,devices.network,devices.battery` |
+  | `HARDINFO_SUMMARY_LIMIT` | 控制页面展示的键值条目数量 | `12` |
+  | `HARDINFO_TIMEOUT` | 命令执行超时时间（秒） | `4.0` |
+
+> 若上述命令或串口不可用，页面会优雅降级，仅展示基础系统信息。
+
 ## API 说明（节选）
 
 - `GET /api/cameras/`：摄像头状态列表

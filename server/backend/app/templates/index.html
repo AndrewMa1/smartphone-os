@@ -33,6 +33,19 @@
               <span>{{ device_status.battery_percentage }}</span>
             </li>
           </ul>
+          {% if device_status.hardware_items %}
+          <div class="device-extra">
+            <h3>硬件详情</h3>
+            <ul class="device-info condensed">
+              {% for label, value in device_status.hardware_items %}
+              <li>
+                <span>{{ label }}</span>
+                <span>{{ value }}</span>
+              </li>
+              {% endfor %}
+            </ul>
+          </div>
+          {% endif %}
         </div>
         <div class="status-card recording-card">
           <h2>录制控制</h2>
@@ -61,6 +74,29 @@
               </button>
             </form>
           </div>
+        </div>
+        <div class="status-card gps-card">
+          <h2>GPS 信息</h2>
+          {% if device_status.gps_items %}
+          <ul class="device-info">
+            {% for label, value in device_status.gps_items %}
+            <li>
+              <span>{{ label }}</span>
+              <span>{{ value }}</span>
+            </li>
+            {% endfor %}
+          </ul>
+          {% else %}
+          <p class="muted">未获取到 GPS 数据，请确认 microcom 及串口连接状态。</p>
+          {% endif %}
+          {% if device_status.gps_raw_sentences %}
+          <p class="meta raw-sample">
+            <span>原始语句：</span>
+            {% for sentence in device_status.gps_raw_sentences %}
+            <code>{{ sentence }}</code>
+            {% endfor %}
+          </p>
+          {% endif %}
         </div>
         <div class="status-card">
           <h2>摄像头摘要</h2>

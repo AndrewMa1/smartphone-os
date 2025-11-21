@@ -130,6 +130,48 @@ body {
   color: #0f172a;
 }
 
+.device-extra {
+  margin-top: 1.25rem;
+  padding-top: 1rem;
+  border-top: 1px solid rgba(148, 163, 184, 0.3);
+}
+
+.device-extra h3 {
+  margin: 0 0 0.75rem;
+  font-size: 1rem;
+  color: #0f172a;
+}
+
+.device-info.condensed {
+  gap: 0.35rem;
+}
+
+.device-info.condensed li {
+  font-size: 0.85rem;
+  color: #475569;
+}
+
+.gps-card code {
+  display: inline-block;
+  margin: 0.15rem 0.35rem 0 0;
+  padding: 0.15rem 0.4rem;
+  border-radius: 6px;
+  background: rgba(15, 23, 42, 0.08);
+  color: #0f172a;
+  font-size: 0.75rem;
+}
+
+.raw-sample {
+  margin-top: 0.75rem;
+  font-size: 0.8rem;
+  color: #475569;
+}
+
+.muted {
+  color: #94a3b8;
+  font-size: 0.9rem;
+}
+
 .algorithms-card ul {
   list-style: none;
   padding: 0;
